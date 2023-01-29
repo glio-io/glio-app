@@ -66,9 +66,9 @@ const mutations = {
   },
 };
 
-async function CallApi(token) {
+async function getSession(token) {
   try {
-    return await axios.get("/admin/me", {
+    return await axios.get("/admin/session", {
       headers: {
         "x-auth-token": token,
       },
@@ -78,29 +78,6 @@ async function CallApi(token) {
   }
 }
 
-async function CallApiCampus(token) {
-  try {
-    return await axios.get("/admin/admins/campus", {
-      headers: {
-        "x-auth-token": token,
-      },
-    });
-  } catch (e) {
-    throw new Error(e);
-  }
-}
-
-async function CallApiSchool(token, _id) {
-  try {
-    return await axios.get(`/admin/school/${_id}`, {
-      headers: {
-        "x-auth-token": token,
-      },
-    });
-  } catch (e) {
-    throw new Error(e);
-  }
-}
 
 async function RedirectToLogin() {
   await router.push("/");
@@ -125,11 +102,11 @@ function calculateLevel(nb) {
 const actions = {
   async login({ commit }, user) {
     try {
-      let config = {
+      const config = {
         headers: { "Content-Type": "application/json" },
       };
       const response = await axios.post(
-        "/auth/login/admin",
+        "/admin/auth/login",
         {
           email: user.email,
           password: user.password,
@@ -137,27 +114,15 @@ const actions = {
         config
       );
       const token = response.data;
+      if (!token) {
+        return false
+      }
+
       localStorage.setItem("token", token);
       commit("authorized", true);
+      return true
     } catch (e) {
       throw e.response?.status;
-    }
-  },
-
-  async getCampuses({ commit }) {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        return;
-      }
-      const response = await CallApiCampus(token);
-      const getDataFromResponse = response.data.Campuses;
-      getDataFromResponse.unshift("Tous");
-      commit("getCampuses", getDataFromResponse);
-    } catch (e) {
-      console.log(e);
-      localStorage.clear();
-      alert("Error from internal server");
     }
   },
 
@@ -167,21 +132,22 @@ const actions = {
       if (!token) {
         return;
       }
-      const response = await CallApi(token);
+      const response = await getSession(token);
+      console.log(response)
+      commit("getPromo", getPromoFromYearNow())
       //get faculty
-      const faculty = await CallApiSchool(token, response.data._schoolId);
-      const fac = faculty.data.faculties;
-      const clss = faculty.data.class
+      //const fac = faculty.data.faculties;
+      //const clss = faculty.data.class
 
 
       //add All
-      fac.unshift("Tous");
+     /* fac.unshift("Tous");
       clss.unshift("Tous")
 
       //Commit
       commit("getClass", clss)
-      commit("getFaculty", fac);
-      commit("getPromo", getPromoFromYearNow());
+      commit("getFaculty", fac);*/
+     /* commit("getPromo", getPromoFromYearNow())
       if (response.status === 200) {
         commit("getToken", token);
         commit("getUserInfo", {
@@ -198,7 +164,7 @@ const actions = {
         localStorage.clear();
         alert("Votre session à expiré");
         await RedirectToLogin();
-      }
+      }*/
     } catch (e) {
       localStorage.clear();
       alert("Error from internal server");

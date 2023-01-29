@@ -7,16 +7,16 @@
         </div>
         <br/>
         <div v-if="isValid === true">
-            <v-card color="danger">
-              <v-card-text>
-                <strong><h3 style="text-align: center; color : red; font-size: 20px">Erreur</h3></strong>
-                <br/>
-                <p style="text-align: center; color : red">{{textError}}</p>
-              </v-card-text>
-            </v-card>
+          <v-card color="danger">
+            <v-card-text>
+              <strong><h3 style="text-align: center; color : red; font-size: 20px">Erreur</h3></strong>
+              <br/>
+              <p style="text-align: center; color : red">{{textError}}</p>
+            </v-card-text>
+          </v-card>
         </div>
         <br/>
-        <v-form ref="form" @submit="Login">
+        <v-form ref="form" @submit="login">
           <v-text-field
               v-model="email"
               label="Email"
@@ -75,8 +75,19 @@ export default {
     };
   },
   methods: {
+    ServerError() {
+      this.isValid = true
+      this.textError = "Veuillez réessayer dans quelques instants"
+      this.loader = null
+    },
+    Unauthorized() {
+      this.textError = "L'identifiant ou le mot de passe saisi n'est pas valide"
+      this.isValid = true
+      this.loader = null
+      this.$store.commit("authorized", false);
+      localStorage.clear()
+    },
     async login(e) {
-      console.log("----ap")
       e.preventDefault();
       if (this.email == 0 || this.password == 0) {
         return
@@ -84,21 +95,20 @@ export default {
         this.loading = !this.loading
 
         try {
-          await this.$store.dispatch('login', {email : this.email, password : this.password})
+          const isAuth = await this.$store.dispatch('login', {email : this.email, password : this.password})
+          if (!isAuth) {
+            this.Unauthorized()
+            return
+          }
           await this.$router.replace({name: "dashboard"});
           setTimeout(() => (this.loading = false), 3000)
         } catch (e) {
           this.loading = false
           if (e !== 401) {
-            this.isValid = true
-            this.textError = "Veuillez réessayer dans quelques instants"
-            this.loader = null
+            this.ServerError()
+
           } else {
-            this.textError = "L'identifiant ou le mot de passe saisi n'est pas valide"
-            this.isValid = true
-            this.loader = null
-            this.$store.commit("authorized", false);
-            localStorage.clear()
+            this.Unauthorized()
           }
         }
       }

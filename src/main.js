@@ -13,7 +13,7 @@ Vue.use(Vuex);
 if (process.env.NODE_ENV === 'production') {
   axios.defaults.baseURL = process.env.VUE_APP_API;
 } else if (process.env.NODE_ENV === 'development') {
-  axios.defaults.baseURL = "http://localhost:8083/api/v1"
+  axios.defaults.baseURL = "http://localhost:8083"
 }
 
 

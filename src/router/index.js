@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Vuex from "vuex";
 
-import Login from "../views/auth/Login.vue";
+import Login from "../views/auth/login.vue";
 import ResetPassword from "../views/auth/ResetPassword";
 import MainLayout from "../container/MainLayout";
 //import Dashboard from "../views/Dashboard";
@@ -33,7 +33,7 @@ const routes = [
   {
     path: "/",
     redirect: {
-      name: "Login.vue",
+      name: "login",
     },
   },
   {
@@ -44,7 +44,7 @@ const routes = [
       const token = localStorage.getItem("token");
       if (token && to.path === "/login") {
         try {
-          await axios.get("/admin/", {
+          await axios.get("/admin/session", {
             headers: {
               "x-auth-token": token,
             },
@@ -87,7 +87,7 @@ const routes = [
       const token = localStorage.getItem("token");
       if (token && to.path !== "/login") {
         try {
-          await axios.get("/admin/", {
+          await axios.get("/admin/session", {
             headers: {
               "x-auth-token": token,
             },
