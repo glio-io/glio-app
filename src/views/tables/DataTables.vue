@@ -14,19 +14,19 @@
       <template v-slot:item.level="{ item }">
         bac +{{item.level}}
       </template>
-      <template v-slot:item.active="{ item }">
+      <template v-slot:item.Active="{ item }">
         <v-chip
-            :color="getColor(item.active)"
+            :color="getColor(item.Active)"
             dark
         >
           <v-icon
-              v-if="item.active === true"
+              v-if="item.Active === true"
               color="white"
           >
             mdi-checkbox-marked-circle
           </v-icon>
           <v-icon
-              v-if="item.active === false"
+              v-if="item.Active === false"
               color="white"
           >
             mdi-cancel
@@ -67,13 +67,14 @@ export default {
         {
           text: 'Email',
           align: 'start',
-          value: 'credentials.email',
+          value: 'Email',
         },
-        {text: 'Ville', value: 'campus'},
-        {text: 'Classe', value: 'class'},
-        {text: 'Spécialité', value: 'faculty'},
-        {text: 'Année', value : 'promo'},
-        {text: 'Status', value: 'active'},
+        {text: 'Prénom', value: 'Firstname'},
+        {text: 'Nom', value: 'Lastname'},
+        {text: 'Classe', value: 'Class'},
+        {text: 'Spécialité', value: 'Faculty'},
+        {text: 'Année', value : 'Promotion'},
+        {text: 'Status', value: 'Active'},
 
       ],
     }

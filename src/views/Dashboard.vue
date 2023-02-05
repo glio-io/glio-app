@@ -14,7 +14,7 @@
       <br/>
       <br/>
       <v-row justify="space-between">
-        <v-col md="2" sm="12" xs="12">
+        <v-col v-if="role" md="2" sm="12" xs="12">
           <v-select
               v-model="sortOptions.campusSort"
               solo-inverted
@@ -112,8 +112,13 @@ export default {
   },
   name: "Dashboard",
   computed: {
+    role() {
+      console.log(this.$store.state.auth.user)
+      return this.$store.state.auth.user.role === "POWER_USER";
+
+    },
     schoolName() {
-      return this.$store.state.auth.school.charAt(0).toUpperCase() + this.$store.state.auth.school.slice(1)
+      return this.$store.state.auth.campusName.charAt(0).toUpperCase() + this.$store.state.auth.campusName.slice(1)
     },
     campuses() {
       return this.$store.state.auth.campuses

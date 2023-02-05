@@ -31,7 +31,7 @@ const actions = {
           "x-auth-token": token,
         },
       });
-      commit("getStudent", response.data);
+      commit("getStudent", response.data.Students);
     } catch (e) {
       console.log(e);
       throw e.response?.status;

@@ -10,6 +10,7 @@ const state = {
   loggedIn: false,
   school: "",
   token: "",
+  campusName : "",
   //searching query data
   campuses: null,
   faculty: null,
@@ -25,11 +26,20 @@ const state = {
     email: "",
     role: "",
     campus: "",
-    _schoolId: "",
+
   },
 };
 
 const mutations = {
+  getUser(state, value) {
+    state.user = {
+      firstname: value.Firstname,
+      lastname: value.Lastname,
+      email: value.Email,
+      role: value.Role,
+      campus: value.Campus,
+    };
+  },
   getClass(state, value) {
     state.class = value
   },
@@ -48,21 +58,14 @@ const mutations = {
   getToken(state, value) {
     state.token = value;
   },
-  getSchool(state, value) {
+  getMySchool(state, value) {
     state.school = value.toLowerCase();
+  },
+  getMyCampus(state, value) {
+    state.campusName = value;
   },
   getCampuses(state, value) {
     state.campuses = value;
-  },
-  getUserInfo(state, value) {
-    state.user = {
-      firstname: value.firstname,
-      lastname: value.lastname,
-      email: value.email,
-      role: value.role,
-      campus: value.campus,
-      _schoolId: value._schoolId,
-    };
   },
 };
 
@@ -74,18 +77,17 @@ async function getSession(token) {
       },
     });
   } catch (e) {
+    await router.push("/");
     throw new Error(e);
   }
 }
 
 
-async function RedirectToLogin() {
+/*async function RedirectToLogin() {
   await router.push("/");
-}
+}*/
 
 function getPromoFromYearNow() {
-
-
   let tab = [...new Array(new Date().getFullYear() - 1990).keys()].map((e) => e + 2000);
   tab.unshift("Tous")
   return tab
@@ -132,43 +134,32 @@ const actions = {
       if (!token) {
         return;
       }
+      commit("getToken", token);
+
       const response = await getSession(token);
-      console.log(response)
-      commit("getPromo", getPromoFromYearNow())
-      //get faculty
-      //const fac = faculty.data.faculties;
-      //const clss = faculty.data.class
+      console.log("--",response.data)
 
+      const user = response.data.Administration;
+      commit("getUser", user)
 
-      //add All
-     /* fac.unshift("Tous");
+      const campus = response.data.Campus.Secondname
+      commit("getMyCampus", campus);
+
+      const fac = response.data.Campus.Faculties;
+      fac.unshift("Tous");
+      commit("getFaculty", fac);
+
+      const clss = response.data.Campus.Classes
       clss.unshift("Tous")
-
-      //Commit
       commit("getClass", clss)
-      commit("getFaculty", fac);*/
-     /* commit("getPromo", getPromoFromYearNow())
-      if (response.status === 200) {
-        commit("getToken", token);
-        commit("getUserInfo", {
-          firstname: response.data.firstname,
-          lastname: response.data.lastname,
-          email: response.data.credentials.email,
-          role: response.data.role,
-          campus: response.data.campuses.toString(),
-          _schoolId: response.data._schoolId,
-        });
-        commit("getSchool", response.data.school);
-        //
-      } else {
-        localStorage.clear();
-        alert("Votre session à expiré");
-        await RedirectToLogin();
-      }*/
+
+      commit("getPromo", getPromoFromYearNow())
+      commit("getMySchool", response.data.School);
+
     } catch (e) {
-      localStorage.clear();
+     /* localStorage.clear();
       alert("Error from internal server");
-      await RedirectToLogin();
+      await RedirectToLogin();*/
     }
   },
 };

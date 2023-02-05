@@ -86,7 +86,7 @@ export default {
   async mounted() {
     try {
       this.$store.commit("loading", true)
-      //await this.$store.dispatch("getStudentList")
+      await this.$store.dispatch("getStudentList")
       await this.$store.dispatch("getAdminInfo")
       //await this.$store.dispatch("getCampuses")
       this.$store.commit("loading", false)
