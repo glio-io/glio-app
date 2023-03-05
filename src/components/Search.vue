@@ -7,18 +7,17 @@
         :search-input.sync="search"
         color="primary"
         hide-no-data
-        solo-inverted
+        outlined
         item-text="Description"
-        item-value="credentials.email"
+        item-value="Email"
         label="Recherche"
         placeholder="Rechercher un étudiant"
         prepend-icon="mdi-account-search"
         return-object
     >
       <template v-slot:item="{ item }">
-        <v-list-item-content @click="redirectToStudent(item._id)">
-          <v-list-item-title v-text="item.credentials.email"></v-list-item-title>
-          <v-list-item-subtitle v-text="item.campus"></v-list-item-subtitle>
+        <v-list-item-content @click="redirectToStudent(item.Id)">
+          <v-list-item-title v-text="item.Email"></v-list-item-title>
         </v-list-item-content>
         <v-list-item-action>
           <v-icon>mdi-eye</v-icon>
@@ -64,7 +63,7 @@ export default {
     },
     items() {
       return this.entries?.filter(v => v).map(entry => {
-        const Description = entry.credentials.email
+        const Description = entry.Email
         return Object.assign({}, entry, {Description})
       })
     },
@@ -80,12 +79,13 @@ export default {
 
       this.isLoading = true
 
-      axios.get(`/admin/search-student?e=${val}`, {
+      axios.get(`/admin/student/search?email=${val}`, {
         headers: {
           "x-auth-token": this.$store.state.auth.token,
         },
       })
           .then(res => {
+            console.log(res)
             this.entries = res.data || []
           })
           .catch(err => console.log(err))

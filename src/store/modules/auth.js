@@ -81,12 +81,6 @@ async function getSession(token) {
     throw new Error(e);
   }
 }
-
-
-/*async function RedirectToLogin() {
-  await router.push("/");
-}*/
-
 function getPromoFromYearNow() {
   let tab = [...new Array(new Date().getFullYear() - 1990).keys()].map((e) => e + 2000);
   tab.unshift("Tous")
@@ -137,7 +131,6 @@ const actions = {
       commit("getToken", token);
 
       const response = await getSession(token);
-      console.log("--",response.data)
 
       const user = response.data.Administration;
       commit("getUser", user)
@@ -146,6 +139,7 @@ const actions = {
       commit("getMyCampus", campus);
 
       const fac = response.data.Campus.Faculties;
+
       fac.unshift("Tous");
       commit("getFaculty", fac);
 
@@ -157,9 +151,9 @@ const actions = {
       commit("getMySchool", response.data.School);
 
     } catch (e) {
-     /* localStorage.clear();
+      /*localStorage.clear();
       alert("Error from internal server");
-      await RedirectToLogin();*/
+      await router.push("/");*/
     }
   },
 };

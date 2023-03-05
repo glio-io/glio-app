@@ -123,7 +123,6 @@
           dark
       >
         <v-card-text>
-          Patientez...
           <v-progress-linear
               indeterminate
               color="white"

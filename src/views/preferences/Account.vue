@@ -7,9 +7,7 @@
             <v-col
                 sm="12" lg="4" md="4"
             >
-              <h1 style="margin-bottom: 20px">Compte {{
-                  role === "super" ? "Super Administrateur" : "Administrateur"
-                }}</h1>
+              <h1 style="margin-bottom: 20px">Informations</h1>
               <h2>{{ school }}</h2>
             </v-col>
             <v-col lg="2">
@@ -42,8 +40,6 @@
                   :readonly="wantsToEdit"
               ></v-text-field>
 
-              <label>Campus principal : </label>
-              <v-chip>{{ campus }}</v-chip>
             </v-col>
             <v-col sm="12" lg="3" md="4" xs="12" s="12">
               <v-text-field
@@ -52,15 +48,18 @@
                   :filled="wantsToEdit"
                   :readonly="wantsToEdit"
               ></v-text-field>
-              <v-select
-                  v-if="role === 'super'"
+              <v-text-field
+                  v-model="role"
+                  label="Rôle"
+                  :readonly=true
+              ></v-text-field>
+              <v-selects
                   v-model="role"
                   :items="items"
                   :filled="wantsToEdit"
                   label="Rôle"
-
                   :readonly="wantsToEdit"
-              ></v-select>
+              ></v-selects>
             </v-col>
           </v-row>
         </div>
@@ -78,7 +77,6 @@
           dark
       >
         <v-card-text>
-          Patientez...
           <v-progress-linear
               indeterminate
               color="white"

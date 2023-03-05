@@ -11,7 +11,7 @@
             <v-card-text>
               <strong><h3 style="text-align: center; color : red; font-size: 20px">Erreur</h3></strong>
               <br/>
-              <p style="text-align: center; color : red">{{textError}}</p>
+              <p style="text-align: center; color : red">{{ textError }}</p>
             </v-card-text>
           </v-card>
         </div>
@@ -22,14 +22,14 @@
               label="Email"
               :rules="emailRules"
               required="true"
-              filled
+              outlined
           ></v-text-field>
           <v-text-field
               v-model="password"
               label="Mot de passe"
               :rules="passwordRules"
               required
-              filled
+              outlined
               type="password"
           ></v-text-field>
           <div class="text-center">
@@ -40,7 +40,7 @@
                 color="primary"
                 :loading="loading"
                 :disabled="loading"
-
+                outlined
             >Se connecter
             </v-btn>
           </div>
@@ -59,8 +59,8 @@ export default {
   name: "login",
   data() {
     return {
-      isValid : false,
-      textError : "",
+      isValid: false,
+      textError: "",
       loader: null,
       loading: false,
       email: "",
@@ -95,7 +95,7 @@ export default {
         this.loading = !this.loading
 
         try {
-          const isAuth = await this.$store.dispatch('login', {email : this.email, password : this.password})
+          const isAuth = await this.$store.dispatch('login', {email: this.email, password: this.password})
           if (!isAuth) {
             this.Unauthorized()
             return

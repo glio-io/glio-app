@@ -17,7 +17,6 @@
         <v-col v-if="role" md="2" sm="12" xs="12">
           <v-select
               v-model="sortOptions.campusSort"
-              solo-inverted
               hide-details
               :items="campuses"
               prepend-inner-icon="mdi-magnify"
@@ -26,8 +25,8 @@
         </v-col>
         <v-col md="2" sm="12" xs="12">
           <v-select
+              outlined
               v-model="sortOptions.speSort"
-              solo-inverted
               hide-details
               :items="faculty"
               prepend-inner-icon="mdi-magnify"
@@ -36,8 +35,8 @@
         </v-col>
         <v-col md="2" sm="12" xs="12">
           <v-select
+              outlined
               v-model="sortOptions.classSort"
-              solo-inverted
               hide-details
               :items="classe"
               prepend-inner-icon="mdi-magnify"
@@ -46,8 +45,8 @@
         </v-col>
         <v-col md="2" sm="12" xs="12">
           <v-select
+              outlined
               v-model="sortOptions.promoSort"
-              solo-inverted
               hide-details
               :items="promo"
               prepend-inner-icon="mdi-magnify"
@@ -55,6 +54,7 @@
           ></v-select>
         </v-col>
 
+        <v-spacer/>
         <v-spacer/>
         <v-spacer/>
         <!-- <v-col>
@@ -73,7 +73,7 @@
              Rappel
            </v-btn>
          </v-col>--->
-        <v-col xl="2" lg="2" md="3" sm="12" xs="12">
+        <v-col>
           <v-btn
               large
               color="primary"
@@ -84,7 +84,18 @@
             </v-icon>
             étudiant
           </v-btn>
-
+        </v-col>
+        <v-col>
+          <v-btn
+              large
+              color="primary"
+              @click="navigateToExcelStudent"
+          >
+            <v-icon left>
+              mdi-file-excel
+            </v-icon>
+            fichier excel
+          </v-btn>
         </v-col>
       </v-row>
       <br/>
@@ -113,7 +124,6 @@ export default {
   name: "Dashboard",
   computed: {
     role() {
-      console.log(this.$store.state.auth.user)
       return this.$store.state.auth.user.role === "POWER_USER";
 
     },
@@ -145,7 +155,7 @@ export default {
         const isClass = this.checkClass(val.classSort);
 
         this.isLoading = true
-        axios.get(`/admin/search-student?${isCampus}&${isFaculty}&${isPromo}&${isClass}`, {
+        axios.get(`/admin/student/search?${isCampus}&${isFaculty}&${isPromo}&${isClass}`, {
           headers: {
             "x-auth-token": this.$store.state.auth.token,
           },
@@ -186,12 +196,15 @@ export default {
     async navigateToAddStudent() {
       await this.$router.push({name: "addStudent"});
     },
+    async navigateToExcelStudent() {
+      await this.$router.push({name : "excelStudent"});
+    },
     checkClass(val) {
       if (val === "Tous") {
         return null
       }
       if (val) {
-        return `cl=${encodeURIComponent(val)}`
+        return `class=${encodeURIComponent(val)}`
       }
     },
     checkPromo(val) {
@@ -199,7 +212,7 @@ export default {
         return null
       }
       if (val) {
-        return `p=${val}`
+        return `promotion=${val}`
       }
     },
     checkFaculty(val) {
@@ -207,7 +220,7 @@ export default {
         return null
       }
       if (val) {
-        return `f=${val}`
+        return `faculty=${val}`
       }
     },
     checkCampus(val) {

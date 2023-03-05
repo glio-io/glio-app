@@ -7,7 +7,7 @@
         :headers="headers"
         :items="items"
         :items-per-page="12"
-        class="elevation-1"
+        class="elevation-0"
         @click:row="GoToStudentPage"
         :page.sync="page"
     >
@@ -93,7 +93,7 @@ export default {
     GoToStudentPage(item) {
       this.$router.push({
         name: "student",
-        params: {id: item._id},
+        params: {id: item.Id},
       });
     }
   },

@@ -71,9 +71,9 @@ export default {
       selectedItem: 0,
       drawer: false,
       links: [
-        ['mdi-inbox-arrow-down', 'Tableau de bord', `/dashboard`],
-        ['mdi-cog', 'Paramètres', '/parametres'],
-        ['mdi-information', 'Support', '/support'],
+        ['mdi-inbox-arrow-down', 'tableau de bord', `/dashboard`],
+        ['mdi-cog', 'paramètre', '/parametres'],
+        ['mdi-information', 'support', '/support'],
       ],
       mini: false,
     }

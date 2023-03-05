@@ -14,6 +14,7 @@ import PageNotFound from "../views/error/PageNotFound";
 import Mail from "../views/mails/Mail";
 import axios from "axios";
 import AddStudent from "../components/AddStudent";
+import ExcelStudent from "../components/ExcelStudent.vue";
 import ServerError from "../views/error/ServerError";
 import ConfirmPassword from "../views/auth/ConfirmPassword";
 import ExpiredLink from "../views/auth/ExpiredLink";
@@ -117,6 +118,11 @@ const routes = [
         path: "add_student",
         name : "addStudent",
         component : AddStudent
+      },
+      {
+        path: "excel_student",
+        name : "excelStudent",
+        component : ExcelStudent
       },
       {
         path: "mail",
